@@ -41,6 +41,8 @@ import {
   Eye,
   Edit,
   Trash2,
+  TrendingUp,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 
@@ -57,24 +59,30 @@ const ordersData = [
 ];
 
 function StatusBadge({ status }: { status: string }) {
-  const config: Record<string, { variant: any; label: string }> = {
-    completed: { variant: 'success', label: 'Hoan thanh' },
-    processing: { variant: 'warning', label: 'Dang xu ly' },
-    pending: { variant: 'secondary', label: 'Cho xu ly' },
-    failed: { variant: 'destructive', label: 'That bai' },
+  const styles: Record<string, { bg: string; text: string; dot: string; label: string }> = {
+    completed: { bg: 'bg-[#50e3c2]/10', text: 'text-[#50e3c2]', dot: 'bg-[#50e3c2]', label: 'Hoan thanh' },
+    processing: { bg: 'bg-[#f5a623]/10', text: 'text-[#f5a623]', dot: 'bg-[#f5a623]', label: 'Dang xu ly' },
+    pending: { bg: 'bg-[#666]/10', text: 'text-[#888]', dot: 'bg-[#666]', label: 'Cho xu ly' },
+    failed: { bg: 'bg-[#e00]/10', text: 'text-[#e00]', dot: 'bg-[#e00]', label: 'That bai' },
   };
-  const { variant, label } = config[status] || { variant: 'secondary', label: status };
-  return <Badge variant={variant}>{label}</Badge>;
+  const style = styles[status] || styles.pending;
+  
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs ${style.bg} ${style.text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`}></span>
+      {style.label}
+    </span>
+  );
 }
 
 function PaymentBadge({ payment }: { payment: string }) {
-  const config: Record<string, { variant: any; label: string }> = {
-    cash: { variant: 'success', label: 'Tien mat' },
-    transfer: { variant: 'info', label: 'Chuyen khoan' },
-    card: { variant: 'default', label: 'The' },
+  const config: Record<string, { color: string; label: string }> = {
+    cash: { color: 'text-[#50e3c2]', label: 'Tien mat' },
+    transfer: { color: 'text-[#0070f3]', label: 'Chuyen khoan' },
+    card: { color: 'text-[#7928ca]', label: 'The' },
   };
-  const { variant, label } = config[payment] || { variant: 'secondary', label: payment };
-  return <Badge variant={variant}>{label}</Badge>;
+  const { color, label } = config[payment] || { color: 'text-[#888]', label: payment };
+  return <span className={`text-xs ${color}`}>{label}</span>;
 }
 
 export default function SalesPage() {
@@ -83,14 +91,14 @@ export default function SalesPage() {
   const [statusFilter, setStatusFilter] = useState('all');
 
   const sidebarItems = [
-    { label: t.menu.dashboard, href: '/', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { label: t.menu.sales, href: '/sales', icon: <ShoppingCart className="w-5 h-5" />, active: true, badge: 3 },
-    { label: t.menu.analytics, href: '/analytics', icon: <BarChart3 className="w-5 h-5" /> },
-    { label: t.menu.finance, href: '/finance', icon: <Wallet className="w-5 h-5" /> },
-    { label: t.menu.inventory, href: '/inventory', icon: <Package className="w-5 h-5" /> },
-    { label: t.menu.customers, href: '/customers', icon: <Users className="w-5 h-5" /> },
-    { label: t.menu.reports, href: '/reports', icon: <FileText className="w-5 h-5" /> },
-    { label: t.menu.settings, href: '/settings', icon: <Settings className="w-5 h-5" /> },
+    { label: t.menu.dashboard, href: '/', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { label: t.menu.sales, href: '/sales', icon: <ShoppingCart className="w-4 h-4" />, badge: 3 },
+    { label: t.menu.analytics, href: '/analytics', icon: <BarChart3 className="w-4 h-4" /> },
+    { label: t.menu.finance, href: '/finance', icon: <Wallet className="w-4 h-4" /> },
+    { label: t.menu.inventory, href: '/inventory', icon: <Package className="w-4 h-4" /> },
+    { label: t.menu.customers, href: '/customers', icon: <Users className="w-4 h-4" /> },
+    { label: t.menu.reports, href: '/reports', icon: <FileText className="w-4 h-4" /> },
+    { label: t.menu.settings, href: '/settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
   const filteredOrders = ordersData.filter((order) => {
@@ -109,13 +117,12 @@ export default function SalesPage() {
     <DashboardLayout
       sidebarItems={sidebarItems}
       headerTitle="Quan ly Ban hang"
-      headerSubtitle="Quan ly don hang va doanh so"
       headerActions={
         <Dialog>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Tao don hang</Button>
+            <Button size="sm"><Plus className="w-4 h-4" />Tao don hang</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Tao don hang moi</DialogTitle>
               <DialogDescription>Nhap thong tin don hang moi</DialogDescription>
@@ -133,16 +140,6 @@ export default function SalesPage() {
                 <Label htmlFor="amount">So tien</Label>
                 <Input id="amount" type="number" placeholder="Nhap so tien" />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="payment">Phuong thuc thanh toan</Label>
-                <Select
-                  options={[
-                    { value: 'cash', label: 'Tien mat' },
-                    { value: 'transfer', label: 'Chuyen khoan' },
-                    { value: 'card', label: 'The tin dung' },
-                  ]}
-                />
-              </div>
             </div>
             <DialogFooter>
               <Button variant="outline">Huy</Button>
@@ -155,68 +152,81 @@ export default function SalesPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-gray-500">Tong doanh thu</p>
-            <p className="text-2xl font-bold text-blue-600">{totalRevenue.toLocaleString()} VND</p>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[#666] text-sm">Tong doanh thu</span>
+              <ArrowUpRight className="w-4 h-4 text-[#666]" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-semibold text-white">{(totalRevenue/1000000).toFixed(1)}M</span>
+              <span className="text-sm text-[#50e3c2] flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />+12%
+              </span>
+            </div>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-gray-500">Tong don hang</p>
-            <p className="text-2xl font-bold text-gray-900">{totalOrders}</p>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[#666] text-sm">Tong don hang</span>
+              <ArrowUpRight className="w-4 h-4 text-[#666]" />
+            </div>
+            <span className="text-2xl font-semibold text-white">{totalOrders}</span>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-gray-500">Da hoan thanh</p>
-            <p className="text-2xl font-bold text-green-600">{completedOrders}</p>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[#666] text-sm">Hoan thanh</span>
+              <ArrowUpRight className="w-4 h-4 text-[#666]" />
+            </div>
+            <span className="text-2xl font-semibold text-[#50e3c2]">{completedOrders}</span>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-6">
-            <p className="text-sm text-gray-500">Dang cho xu ly</p>
-            <p className="text-2xl font-bold text-orange-600">{pendingOrders}</p>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[#666] text-sm">Dang xu ly</span>
+              <ArrowUpRight className="w-4 h-4 text-[#666]" />
+            </div>
+            <span className="text-2xl font-semibold text-[#f5a623]">{pendingOrders}</span>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                placeholder="Tim kiem don hang, khach hang..."
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'Tat ca trang thai' },
-                { value: 'completed', label: 'Hoan thanh' },
-                { value: 'processing', label: 'Dang xu ly' },
-                { value: 'pending', label: 'Cho xu ly' },
-                { value: 'failed', label: 'That bai' },
-              ]}
-              className="w-full md:w-48"
-            />
-            <Button variant="outline"><Filter className="w-4 h-4 mr-2" />Loc</Button>
-            <Button variant="outline"><Download className="w-4 h-4 mr-2" />Xuat Excel</Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#666]" />
+          <Input
+            placeholder="Tim kiem don hang, khach hang..."
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={[
+            { value: 'all', label: 'Tat ca' },
+            { value: 'completed', label: 'Hoan thanh' },
+            { value: 'processing', label: 'Dang xu ly' },
+            { value: 'pending', label: 'Cho xu ly' },
+            { value: 'failed', label: 'That bai' },
+          ]}
+          className="w-full md:w-40"
+        />
+        <Button variant="outline" size="sm"><Download className="w-4 h-4" />Xuat</Button>
+      </div>
 
       {/* Orders Table */}
       <Card>
-        <CardHeader>
-          <CardTitle>Danh sach don hang</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Don hang</CardTitle>
+          <Button variant="ghost" size="sm">Xem tat ca</Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -228,25 +238,25 @@ export default function SalesPage() {
                 <TableHead>Thanh toan</TableHead>
                 <TableHead>Trang thai</TableHead>
                 <TableHead>Ngay</TableHead>
-                <TableHead>Thao tac</TableHead>
+                <TableHead className="text-right">Thao tac</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.orderNo}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.phone}</TableCell>
-                  <TableCell>{order.products}</TableCell>
-                  <TableCell>{order.amount.toLocaleString()} VND</TableCell>
+                  <TableCell className="font-medium text-white">{order.orderNo}</TableCell>
+                  <TableCell className="text-[#ededed]">{order.customer}</TableCell>
+                  <TableCell className="text-[#888]">{order.phone}</TableCell>
+                  <TableCell className="text-[#888]">{order.products}</TableCell>
+                  <TableCell className="text-white">{order.amount.toLocaleString()}</TableCell>
                   <TableCell><PaymentBadge payment={order.payment} /></TableCell>
                   <TableCell><StatusBadge status={order.status} /></TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
+                  <TableCell className="text-[#888]">{order.date}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-1">
                       <Button variant="ghost" size="icon"><Eye className="w-4 h-4" /></Button>
                       <Button variant="ghost" size="icon"><Edit className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="icon" className="text-red-500"><Trash2 className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="icon" className="text-[#e00]"><Trash2 className="w-4 h-4" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

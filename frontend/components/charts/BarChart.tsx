@@ -15,33 +15,52 @@ export function BarChart({
   data,
   dataKey,
   title,
-  fill = '#f97316',
+  fill = '#50e3c2',
   height = 300,
 }: BarChartProps) {
   const maxValue = Math.max(...data.map((d) => d[dataKey] as number));
-  const barWidth = 100 / data.length;
+  const barWidth = 80 / data.length;
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+    <div className="bg-[#0a0a0a] rounded-lg border border-[#333] p-5">
       {title && (
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {title}
-        </h3>
+        <h3 className="text-sm font-medium text-[#ededed] mb-4">{title}</h3>
       )}
       <svg
         viewBox="0 0 100 100"
         className="w-full"
         style={{ height: `${height}px` }}
-        preserveAspectRatio="xMidYMid meet"
+        preserveAspectRatio="none"
       >
-        <line x1="5" y1="90" x2="95" y2="90" stroke="#e5e7eb" strokeWidth="0.5" />
-        <line x1="5" y1="10" x2="5" y2="90" stroke="#e5e7eb" strokeWidth="0.5" />
+        {/* Grid lines */}
+        {[0, 25, 50, 75, 100].map((pct) => (
+          <line
+            key={pct}
+            x1="10"
+            y1={15 + (pct / 100) * 70}
+            x2="90"
+            y2={15 + (pct / 100) * 70}
+            stroke="#333"
+            strokeWidth="0.3"
+          />
+        ))}
+        
+        {/* Bars */}
         {data.map((d, i) => {
-          const height = ((d[dataKey] as number) / maxValue) * 80;
-          const x = 5 + (barWidth * i) + barWidth * 0.1;
-          const y = 90 - height;
+          const barHeight = ((d[dataKey] as number) / maxValue) * 70;
+          const x = 10 + (barWidth * i) + barWidth * 0.15;
+          const y = 85 - barHeight;
           return (
-            <rect key={i} x={x} y={y} width={barWidth * 0.8} height={height} fill={fill} rx="1" />
+            <rect
+              key={i}
+              x={x}
+              y={y}
+              width={barWidth * 0.7}
+              height={barHeight}
+              fill={fill}
+              rx="2"
+              opacity="0.9"
+            />
           );
         })}
       </svg>

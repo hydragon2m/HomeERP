@@ -4,28 +4,17 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LineChart, BarChart, PieChart, AreaChart } from '@/components/charts';
+import { useSidebarItems } from '@/lib/navigation';
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  BarChart3,
-  Wallet,
-  Package,
-  Users,
-  FileText,
-  Settings,
   TrendingUp,
   TrendingDown,
-  Target,
-  Activity,
-  Percent,
   Eye,
-  MousePointer,
+  Users,
+  Target,
   Clock,
+  ArrowUpRight,
 } from 'lucide-react';
-import { useTranslation } from '@/lib/i18n';
 
 // Sample analytics data
 const trafficData = [
@@ -48,18 +37,18 @@ const conversionData = [
 const sourceData = [
   { name: 'Tim kiem', value: 40 },
   { name: 'Truc tiep', value: 25 },
-  { name: 'Mang xa hoi', value: 20 },
+  { name: 'MXH', value: 20 },
   { name: 'Email', value: 10 },
   { name: 'Khac', value: 5 },
 ];
 
 const pageViewData = [
-  { name: 'Thang 1', views: 12000 },
-  { name: 'Thang 2', views: 15000 },
-  { name: 'Thang 3', views: 18000 },
-  { name: 'Thang 4', views: 22000 },
-  { name: 'Thang 5', views: 25000 },
-  { name: 'Thang 6', views: 28000 },
+  { name: 'T1', views: 12000 },
+  { name: 'T2', views: 15000 },
+  { name: 'T3', views: 18000 },
+  { name: 'T4', views: 22000 },
+  { name: 'T5', views: 25000 },
+  { name: 'T6', views: 28000 },
 ];
 
 function MetricCard({
@@ -67,113 +56,61 @@ function MetricCard({
   value,
   change,
   icon: Icon,
-  color,
 }: {
   title: string;
   value: string;
   change: number;
-  icon: any;
-  color: string;
+  icon: React.ElementType;
 }) {
-  const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-    green: 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-    orange: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
-    purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-  };
-
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
-            <p className="text-2xl font-bold mt-1">{value}</p>
-            <div className="flex items-center mt-2">
-              {change >= 0 ? (
-                <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              ) : (
-                <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
-              )}
-              <span className={change >= 0 ? 'text-green-600 text-sm' : 'text-red-600 text-sm'}>
-                {change >= 0 ? '+' : ''}{change}%
-              </span>
-              <span className="text-gray-500 text-sm ml-1">so voi tuan truoc</span>
-            </div>
-          </div>
-          <div className={`p-3 rounded-full ${colorClasses[color]}`}>
-            <Icon className="w-6 h-6" />
-          </div>
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[#666] text-sm">{title}</span>
+          <Icon className="w-4 h-4 text-[#666]" />
         </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-semibold text-white">{value}</span>
+          <span className={`text-sm flex items-center gap-1 ${change >= 0 ? 'text-[#50e3c2]' : 'text-[#e00]'}`}>
+            {change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+            {change >= 0 ? '+' : ''}{change}%
+          </span>
+        </div>
+        <span className="text-xs text-[#666]">so voi tuan truoc</span>
       </CardContent>
     </Card>
   );
 }
 
 export default function AnalyticsPage() {
-  const { t } = useTranslation();
+  const sidebarItems = useSidebarItems();
   const [timeRange, setTimeRange] = useState('7d');
-
-  const sidebarItems = [
-    { label: t.menu.dashboard, href: '/', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { label: t.menu.sales, href: '/sales', icon: <ShoppingCart className="w-5 h-5" /> },
-    { label: t.menu.analytics, href: '/analytics', icon: <BarChart3 className="w-5 h-5" />, active: true },
-    { label: t.menu.finance, href: '/finance', icon: <Wallet className="w-5 h-5" /> },
-    { label: t.menu.inventory, href: '/inventory', icon: <Package className="w-5 h-5" /> },
-    { label: t.menu.customers, href: '/customers', icon: <Users className="w-5 h-5" /> },
-    { label: t.menu.reports, href: '/reports', icon: <FileText className="w-5 h-5" /> },
-    { label: t.menu.settings, href: '/settings', icon: <Settings className="w-5 h-5" /> },
-  ];
 
   return (
     <DashboardLayout
       sidebarItems={sidebarItems}
       headerTitle="Phan tich"
-      headerSubtitle="Thong ke va phan tich du lieu"
       headerActions={
-        <div className="flex gap-2">
-          <Button variant={timeRange === '7d' ? 'default' : 'outline'} size="sm" onClick={() => setTimeRange('7d')}>
-            7 ngay
-          </Button>
-          <Button variant={timeRange === '30d' ? 'default' : 'outline'} size="sm" onClick={() => setTimeRange('30d')}>
-            30 ngay
-          </Button>
-          <Button variant={timeRange === '90d' ? 'default' : 'outline'} size="sm" onClick={() => setTimeRange('90d')}>
-            90 ngay
-          </Button>
+        <div className="flex gap-1">
+          {['7d', '30d', '90d'].map((range) => (
+            <Button 
+              key={range}
+              variant={timeRange === range ? 'default' : 'ghost'} 
+              size="sm" 
+              onClick={() => setTimeRange(range)}
+            >
+              {range === '7d' ? '7 ngay' : range === '30d' ? '30 ngay' : '90 ngay'}
+            </Button>
+          ))}
         </div>
       }
     >
       {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <MetricCard
-          title="Tong luot truy cap"
-          value="12,456"
-          change={12.5}
-          icon={Eye}
-          color="blue"
-        />
-        <MetricCard
-          title="Nguoi dung moi"
-          value="1,234"
-          change={8.2}
-          icon={Users}
-          color="green"
-        />
-        <MetricCard
-          title="Ty le chuyen doi"
-          value="3.24%"
-          change={-2.1}
-          icon={Target}
-          color="orange"
-        />
-        <MetricCard
-          title="Thoi gian trung binh"
-          value="4m 32s"
-          change={5.8}
-          icon={Clock}
-          color="purple"
-        />
+        <MetricCard title="Luot truy cap" value="12,456" change={12.5} icon={Eye} />
+        <MetricCard title="Nguoi dung moi" value="1,234" change={8.2} icon={Users} />
+        <MetricCard title="Ty le chuyen doi" value="3.24%" change={-2.1} icon={Target} />
+        <MetricCard title="Thoi gian TB" value="4m 32s" change={5.8} icon={Clock} />
       </div>
 
       {/* Charts Row 1 */}
@@ -183,7 +120,7 @@ export default function AnalyticsPage() {
           dataKey="visits"
           title="Luot truy cap theo ngay"
           xAxisKey="name"
-          stroke="#3b82f6"
+          stroke="#0070f3"
           height={300}
         />
         <AreaChart
@@ -191,7 +128,7 @@ export default function AnalyticsPage() {
           dataKey="views"
           title="Luot xem trang theo thang"
           xAxisKey="name"
-          fill="#10b981"
+          fill="#50e3c2"
           height={300}
         />
       </div>
@@ -203,7 +140,7 @@ export default function AnalyticsPage() {
           dataKey="value"
           title="Pheu chuyen doi"
           xAxisKey="name"
-          fill="#f97316"
+          fill="#f5a623"
           height={280}
         />
         <PieChart
@@ -212,8 +149,9 @@ export default function AnalyticsPage() {
           height={280}
         />
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Trang pho bien</CardTitle>
+            <Button variant="ghost" size="sm">Xem tat ca</Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -226,15 +164,15 @@ export default function AnalyticsPage() {
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{item.page}</p>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
+                    <p className="text-sm text-[#ededed]">{item.page}</p>
+                    <div className="w-full bg-[#222] rounded-full h-1.5 mt-1">
                       <div
-                        className="bg-blue-600 h-2 rounded-full"
+                        className="bg-[#0070f3] h-1.5 rounded-full transition-all"
                         style={{ width: `${item.percent}%` }}
                       />
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500 ml-4">{item.views}</span>
+                  <span className="text-sm text-[#888] ml-4">{item.views}</span>
                 </div>
               ))}
             </div>
@@ -251,16 +189,16 @@ export default function AnalyticsPage() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { device: 'Desktop', percent: 58, color: 'bg-blue-500' },
-                { device: 'Mobile', percent: 35, color: 'bg-green-500' },
-                { device: 'Tablet', percent: 7, color: 'bg-orange-500' },
+                { device: 'Desktop', percent: 58, color: 'bg-[#0070f3]' },
+                { device: 'Mobile', percent: 35, color: 'bg-[#50e3c2]' },
+                { device: 'Tablet', percent: 7, color: 'bg-[#f5a623]' },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <span className="w-20 text-sm">{item.device}</span>
-                  <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                    <div className={`${item.color} h-3 rounded-full`} style={{ width: `${item.percent}%` }} />
+                  <span className="w-16 text-sm text-[#888]">{item.device}</span>
+                  <div className="flex-1 bg-[#222] rounded-full h-2">
+                    <div className={`${item.color} h-2 rounded-full`} style={{ width: `${item.percent}%` }} />
                   </div>
-                  <span className="text-sm font-medium w-12 text-right">{item.percent}%</span>
+                  <span className="text-sm text-white w-12 text-right">{item.percent}%</span>
                 </div>
               ))}
             </div>
@@ -274,18 +212,18 @@ export default function AnalyticsPage() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { browser: 'Chrome', percent: 65, color: 'bg-yellow-500' },
-                { browser: 'Safari', percent: 18, color: 'bg-blue-500' },
-                { browser: 'Firefox', percent: 10, color: 'bg-orange-500' },
-                { browser: 'Edge', percent: 5, color: 'bg-cyan-500' },
-                { browser: 'Khac', percent: 2, color: 'bg-gray-500' },
+                { browser: 'Chrome', percent: 65, color: 'bg-[#f5a623]' },
+                { browser: 'Safari', percent: 18, color: 'bg-[#0070f3]' },
+                { browser: 'Firefox', percent: 10, color: 'bg-[#ff0080]' },
+                { browser: 'Edge', percent: 5, color: 'bg-[#50e3c2]' },
+                { browser: 'Khac', percent: 2, color: 'bg-[#666]' },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <span className="w-20 text-sm">{item.browser}</span>
-                  <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                    <div className={`${item.color} h-3 rounded-full`} style={{ width: `${item.percent}%` }} />
+                  <span className="w-16 text-sm text-[#888]">{item.browser}</span>
+                  <div className="flex-1 bg-[#222] rounded-full h-2">
+                    <div className={`${item.color} h-2 rounded-full`} style={{ width: `${item.percent}%` }} />
                   </div>
-                  <span className="text-sm font-medium w-12 text-right">{item.percent}%</span>
+                  <span className="text-sm text-white w-12 text-right">{item.percent}%</span>
                 </div>
               ))}
             </div>

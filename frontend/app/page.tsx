@@ -2,13 +2,32 @@
 
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { KPICard } from '@/components/KPICard';
-import { Metric } from '@/components/Metric';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { LineChart, BarChart, PieChart, AreaChart } from '@/components/charts';
-import { DataTable } from '@/components/DataTable';
-import { Calendar } from '@/components/Calendar';
-import { StatusBadge } from '@/components/StatusBadge';
-import { Button } from '@/components/Button';
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  BarChart3,
+  Wallet,
+  Package,
+  Users,
+  FileText,
+  Settings,
+  TrendingUp,
+  TrendingDown,
+  ArrowUpRight,
+  Plus,
+} from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import {
   revenueData,
@@ -18,214 +37,215 @@ import {
   performanceData,
 } from '@/lib/mockData';
 
+// Vercel-style KPI Card
+function KPICard({
+  title,
+  value,
+  change,
+  changeType = 'positive',
+}: {
+  title: string;
+  value: string;
+  change?: string;
+  changeType?: 'positive' | 'negative' | 'neutral';
+}) {
+  return (
+    <Card>
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-[#666] text-sm">{title}</span>
+          <ArrowUpRight className="w-4 h-4 text-[#666]" />
+        </div>
+        <div className="flex items-baseline gap-3">
+          <span className="text-2xl font-semibold text-white">{value}</span>
+          {change && (
+            <span className={`text-sm flex items-center gap-1 ${
+              changeType === 'positive' ? 'text-[#50e3c2]' : 
+              changeType === 'negative' ? 'text-[#e00]' : 'text-[#666]'
+            }`}>
+              {changeType === 'positive' ? <TrendingUp className="w-3 h-3" /> : 
+               changeType === 'negative' ? <TrendingDown className="w-3 h-3" /> : null}
+              {change}
+            </span>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Status Badge Vercel style
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, { bg: string; text: string; dot: string; label: string }> = {
+    completed: { bg: 'bg-[#50e3c2]/10', text: 'text-[#50e3c2]', dot: 'bg-[#50e3c2]', label: 'Hoan thanh' },
+    processing: { bg: 'bg-[#f5a623]/10', text: 'text-[#f5a623]', dot: 'bg-[#f5a623]', label: 'Dang xu ly' },
+    pending: { bg: 'bg-[#666]/10', text: 'text-[#888]', dot: 'bg-[#666]', label: 'Cho xu ly' },
+    failed: { bg: 'bg-[#e00]/10', text: 'text-[#e00]', dot: 'bg-[#e00]', label: 'That bai' },
+  };
+  const style = styles[status] || styles.pending;
+  
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs ${style.bg} ${style.text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`}></span>
+      {style.label}
+    </span>
+  );
+}
+
 export default function Home() {
   const { t } = useTranslation();
 
   const sidebarItems = [
-    { label: t.menu.dashboard, href: '/', icon: '📊', active: true },
-    { label: t.menu.sales, href: '/sales', icon: '💰', badge: 3 },
-    { label: t.menu.analytics, href: '/analytics', icon: '📈' },
-    { label: t.menu.finance, href: '/finance', icon: '💳' },
-    { label: t.menu.inventory, href: '/inventory', icon: '📦' },
-    { label: t.menu.customers, href: '/customers', icon: '👥' },
-    { label: t.menu.reports, href: '/reports', icon: '📋' },
-    { label: t.menu.settings, href: '/settings', icon: '⚙️' },
+    { label: t.menu.dashboard, href: '/', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { label: t.menu.sales, href: '/sales', icon: <ShoppingCart className="w-4 h-4" />, badge: 3 },
+    { label: t.menu.analytics, href: '/analytics', icon: <BarChart3 className="w-4 h-4" /> },
+    { label: t.menu.finance, href: '/finance', icon: <Wallet className="w-4 h-4" /> },
+    { label: t.menu.inventory, href: '/inventory', icon: <Package className="w-4 h-4" /> },
+    { label: t.menu.customers, href: '/customers', icon: <Users className="w-4 h-4" /> },
+    { label: t.menu.reports, href: '/reports', icon: <FileText className="w-4 h-4" /> },
+    { label: t.menu.settings, href: '/settings', icon: <Settings className="w-4 h-4" /> },
   ];
 
   return (
     <DashboardLayout
       sidebarItems={sidebarItems}
       headerTitle={t.dashboard.title}
-      headerSubtitle={`${t.dashboard.welcome} đến HomeERP`}
       headerActions={
-        <Button variant="primary" size="md">
-          + {t.actions.add}
+        <Button size="sm">
+          <Plus className="w-4 h-4" />
+          Tao moi
         </Button>
       }
     >
-      {/* KPI Cards Row */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <KPICard
-          title={t.metrics.revenue}
-          value="₫45,200,000"
-          subtitle={t.metrics.thisMonth}
-          trend={12.5}
-          trendLabel={t.time.thisMonth}
-          color="blue"
+          title="Doanh thu"
+          value="₫45.2M"
+          change="+12.5%"
+          changeType="positive"
         />
         <KPICard
-          title={t.metrics.sales}
+          title="Don hang"
           value="1,234"
-          subtitle={t.metrics.thisMonth}
-          trend={8.2}
-          color="orange"
+          change="+8.2%"
+          changeType="positive"
         />
         <KPICard
-          title={t.metrics.orders}
+          title="Khach hang"
           value="856"
-          subtitle={t.metrics.thisMonth}
-          trend={-3.1}
-          color="purple"
+          change="-3.1%"
+          changeType="negative"
         />
         <KPICard
-          title={t.metrics.users}
+          title="San pham"
           value="2,456"
-          subtitle={t.metrics.total}
-          trend={15.8}
-          color="green"
+          change="+15.8%"
+          changeType="positive"
         />
       </div>
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-6">
-        <Metric label={t.metrics.profit} value="₫12.5M" color="green" size="sm" />
-        <Metric label={t.metrics.growth} value="23.5%" color="blue" size="sm" />
-        <Metric label="ROI" value="15.2%" color="orange" size="sm" />
-        <Metric label="CTR" value="8.9%" color="purple" size="sm" />
-        <Metric label="Bounce Rate" value="32.1%" color="red" size="sm" />
-        <Metric label={t.metrics.total} value="5.2K" color="yellow" size="sm" />
-      </div>
-
-      {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         <LineChart
           data={revenueData}
           dataKey="revenue"
-          title={t.charts.revenue}
+          title="Doanh thu theo thang"
           xAxisKey="name"
-          stroke="#3b82f6"
-          height={300}
+          stroke="#0070f3"
+          height={280}
         />
         <AreaChart
           data={performanceData}
           dataKey="performance"
-          title={t.charts.trend}
+          title="Hieu suat"
           xAxisKey="name"
-          fill="#a855f7"
-          height={300}
+          fill="#7928ca"
+          height={280}
         />
       </div>
 
-      {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      {/* Second Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <BarChart
           data={salesData}
           dataKey="sales"
-          title={t.charts.sales}
+          title="Ban hang"
           xAxisKey="name"
-          fill="#f97316"
-          height={300}
+          fill="#50e3c2"
+          height={280}
         />
         <PieChart
           data={categoryData}
-          title={t.charts.distribution}
-          height={300}
+          title="Phan loai san pham"
+          height={280}
         />
-        <div className="flex flex-col gap-6">
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              {t.charts.performance}
-            </h3>
-            <div className="flex items-center justify-center h-32 bg-gray-50 dark:bg-gray-800 rounded-md">
-              <p className="text-gray-500 dark:text-gray-400">Hiệu suất: 90%</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tong quan nhanh</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between py-2 border-b border-[#333]">
+              <span className="text-[#888] text-sm">Tong san pham</span>
+              <span className="text-white font-medium">5,234</span>
             </div>
-          </div>
-          <Calendar title={t.time.january} />
-        </div>
+            <div className="flex items-center justify-between py-2 border-b border-[#333]">
+              <span className="text-[#888] text-sm">Het hang</span>
+              <span className="text-[#e00] font-medium">23</span>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-[#333]">
+              <span className="text-[#888] text-sm">Canh bao</span>
+              <span className="text-[#f5a623] font-medium">45</span>
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <span className="text-[#888] text-sm">Ty le giu chan</span>
+              <span className="text-[#50e3c2] font-medium">94.2%</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Orders Table */}
-      <div className="mb-6">
-        <DataTable
-          title={t.menu.sales}
-          columns={[
-            { key: 'orderNo', label: 'Số ĐH', width: '100px' },
-            { key: 'customer', label: 'Khách hàng' },
-            { key: 'amount', label: 'Số tiền' },
-            {
-              key: 'status',
-              label: t.table.status,
-              render: (value: string) => (
-                <StatusBadge status={value as any} />
-              ),
-            },
-            { key: 'date', label: t.table.date },
-            {
-              key: 'id',
-              label: t.table.action,
-              render: () => (
-                <Button variant="secondary" size="sm">
-                  {t.actions.view}
-                </Button>
-              ),
-            },
-          ]}
-          data={ordersData}
-        />
-      </div>
-
-      {/* Secondary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.menu.inventory}
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Tổng sản phẩm</span>
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">5,234</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Sản phẩm hết hàng</span>
-              <span className="text-2xl font-bold text-red-600">23</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Cảnh báo tồn kho</span>
-              <span className="text-2xl font-bold text-orange-600">45</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.menu.customers}
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Khách hàng mới</span>
-              <span className="text-2xl font-bold text-green-600">127</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Khách hàng hoạt động</span>
-              <span className="text-2xl font-bold text-blue-600">2,456</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Tỷ lệ giữ chân</span>
-              <span className="text-2xl font-bold text-purple-600">94.2%</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.menu.reports}
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Báo cáo hôm nay</span>
-              <StatusBadge status="completed" size="sm" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Báo cáo tuần</span>
-              <StatusBadge status="processing" size="sm" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Báo cáo tháng</span>
-              <StatusBadge status="pending" size="sm" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Don hang gan day</CardTitle>
+          <Button variant="outline" size="sm">
+            Xem tat ca
+          </Button>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-[#333] hover:bg-transparent">
+                <TableHead className="text-[#888]">Ma DH</TableHead>
+                <TableHead className="text-[#888]">Khach hang</TableHead>
+                <TableHead className="text-[#888]">So tien</TableHead>
+                <TableHead className="text-[#888]">Trang thai</TableHead>
+                <TableHead className="text-[#888]">Ngay</TableHead>
+                <TableHead className="text-[#888] text-right">Hanh dong</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {ordersData.map((order) => (
+                <TableRow key={order.id} className="border-[#333]">
+                  <TableCell className="font-medium text-white">{order.orderNo}</TableCell>
+                  <TableCell className="text-[#888]">{order.customer}</TableCell>
+                  <TableCell className="text-white">₫{order.amount}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={order.status} />
+                  </TableCell>
+                  <TableCell className="text-[#888]">{order.date}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="sm">
+                      Xem
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </DashboardLayout>
   );
 }
