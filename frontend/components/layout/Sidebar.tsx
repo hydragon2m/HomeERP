@@ -3,6 +3,18 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/i18n';
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  BarChart3,
+  Wallet,
+  Package,
+  Users,
+  FileText,
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 interface SidebarItem {
   label: string;
@@ -11,6 +23,17 @@ interface SidebarItem {
   active?: boolean;
   badge?: number;
 }
+
+export const menuIcons = {
+  dashboard: LayoutDashboard,
+  sales: ShoppingCart,
+  analytics: BarChart3,
+  finance: Wallet,
+  inventory: Package,
+  customers: Users,
+  reports: FileText,
+  settings: Settings,
+};
 
 interface SidebarProps {
   items: SidebarItem[];
@@ -53,7 +76,7 @@ export function Sidebar({
           onClick={handleCollapse}
           className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
         >
-          {collapsed ? '→' : '←'}
+          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface PieChartProps {
   data: Array<{ name: string; value: number }>;
@@ -17,17 +17,14 @@ export function PieChart({
   height = 300,
   colors = DEFAULT_COLORS,
 }: PieChartProps) {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-  let currentAngle = -90;
-  const slices = data.map((item, index) => {
-    const sliceAngle = (item.value / total) * 360;
-    const startAngle = currentAngle;
-    const endAngle = currentAngle + sliceAngle;
-    const color = colors[index % colors.length];
-    currentAngle = endAngle;
-    return { ...item, startAngle, endAngle, color };
-  });
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  
   const cx = 50;
   const cy = 50;
   const r = 30;
@@ -35,8 +32,8 @@ export function PieChart({
   const polarToCartesian = (angle: number) => {
     const radians = (angle * Math.PI) / 180;
     return {
-      x: cx + r * Math.cos(radians),
-      y: cy + r * Math.sin(radians),
+      x: Math.round(cx + r * Math.cos(radians)),
+      y: Math.round(cy + r * Math.sin(radians)),
     };
   };
 
@@ -45,6 +42,18 @@ export function PieChart({
     const end = polarToCartesian(endAngle);
     const largeArc = endAngle - startAngle > 180 ? 1 : 0;
     return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y} Z`;
+  };
+
+  const getSlices = () => {
+    let currentAngle = -90;
+    return data.map((item, index) => {
+      const sliceAngle = (item.value / total) * 360;
+      const startAngle = currentAngle;
+      const endAngle = currentAngle + sliceAngle;
+      const color = colors[index % colors.length];
+      currentAngle = endAngle;
+      return { ...item, startAngle, endAngle, color };
+    });
   };
 
   return (
@@ -60,8 +69,9 @@ export function PieChart({
           className="w-full max-w-sm"
           style={{ height: `${Math.min(height, 200)}px` }}
           preserveAspectRatio="xMidYMid meet"
+          suppressHydrationWarning
         >
-          {slices.map((slice, index) => (
+          {mounted && getSlices().map((slice, index) => (
             <path
               key={index}
               d={createArcPath(slice.startAngle, slice.endAngle)}
