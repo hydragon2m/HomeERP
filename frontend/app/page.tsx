@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { KPICard } from '@/components/KPICard';
 import { Metric } from '@/components/Metric';
-import { DashboardLineChart, DashboardBarChart, DashboardPieChart, DashboardAreaChart, GaugeChart } from '@/components/charts';
 import { DataTable } from '@/components/DataTable';
 import { Calendar } from '@/components/Calendar';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -12,32 +11,6 @@ import { Button } from '@/components/Button';
 import { useTranslation } from '@/lib/i18n';
 
 // Sample data
-const revenueData = [
-  { name: 'Tháng 1', revenue: 4000 },
-  { name: 'Tháng 2', revenue: 3000 },
-  { name: 'Tháng 3', revenue: 2000 },
-  { name: 'Tháng 4', revenue: 2780 },
-  { name: 'Tháng 5', revenue: 1890 },
-  { name: 'Tháng 6', revenue: 2390 },
-];
-
-const salesData = [
-  { name: 'Tháng 1', sales: 4000, returns: 2400 },
-  { name: 'Tháng 2', sales: 3000, returns: 1398 },
-  { name: 'Tháng 3', sales: 2000, returns: 9800 },
-  { name: 'Tháng 4', sales: 2780, returns: 3908 },
-  { name: 'Tháng 5', sales: 1890, returns: 4800 },
-  { name: 'Tháng 6', sales: 2390, returns: 3800 },
-];
-
-const categoryData = [
-  { name: 'Điện tử', value: 4000 },
-  { name: 'Thực phẩm', value: 3000 },
-  { name: 'Quần áo', value: 2000 },
-  { name: 'Sách', value: 2780 },
-  { name: 'Khác', value: 1890 },
-];
-
 const ordersData = [
   { id: 1, orderNo: 'ĐH001', customer: 'Nguyễn Văn A', amount: '1,000,000', status: 'completed', date: '2024-03-10' },
   { id: 2, orderNo: 'ĐH002', customer: 'Trần Thị B', amount: '2,500,000', status: 'processing', date: '2024-03-11' },
@@ -116,45 +89,51 @@ export default function Home() {
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <DashboardLineChart
-          data={revenueData}
-          title={t.charts.revenue}
-          dataKey="revenue"
-          stroke="#3b82f6"
-          height={300}
-        />
-        <DashboardAreaChart
-          data={revenueData}
-          title={t.charts.trend}
-          dataKey="revenue"
-          fill="#a855f7"
-          height={300}
-        />
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {t.charts.revenue}
+          </h3>
+          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
+            <p className="text-gray-500 dark:text-gray-400">Biểu đồ doanh thu...</p>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {t.charts.trend}
+          </h3>
+          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
+            <p className="text-gray-500 dark:text-gray-400">Biểu đồ xu hướng...</p>
+          </div>
+        </div>
       </div>
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <DashboardBarChart
-          data={salesData}
-          title={t.charts.sales}
-          dataKey="sales"
-          fill="#f97316"
-          height={300}
-        />
-        <DashboardPieChart
-          data={categoryData}
-          title={t.charts.distribution}
-          dataKey="value"
-          height={300}
-        />
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {t.charts.sales}
+          </h3>
+          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
+            <p className="text-gray-500 dark:text-gray-400">Biểu đồ bán hàng...</p>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {t.charts.distribution}
+          </h3>
+          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
+            <p className="text-gray-500 dark:text-gray-400">Biểu đồ phân phối...</p>
+          </div>
+        </div>
         <div className="flex flex-col gap-6">
-          <GaugeChart
-            value={75}
-            title={t.charts.performance}
-            maxValue={100}
-            color="#10b981"
-            height={200}
-          />
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              {t.charts.performance}
+            </h3>
+            <div className="flex items-center justify-center h-32 bg-gray-50 dark:bg-gray-800 rounded-md">
+              <p className="text-gray-500 dark:text-gray-400">Hiệu suất...</p>
+            </div>
+          </div>
           <Calendar title={t.time.january} />
         </div>
       </div>
