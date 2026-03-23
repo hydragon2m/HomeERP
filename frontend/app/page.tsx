@@ -4,20 +4,19 @@ import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { KPICard } from '@/components/KPICard';
 import { Metric } from '@/components/Metric';
+import { LineChart, BarChart, PieChart, AreaChart } from '@/components/charts';
 import { DataTable } from '@/components/DataTable';
 import { Calendar } from '@/components/Calendar';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Button } from '@/components/Button';
 import { useTranslation } from '@/lib/i18n';
-
-// Sample data
-const ordersData = [
-  { id: 1, orderNo: 'ĐH001', customer: 'Nguyễn Văn A', amount: '1,000,000', status: 'completed', date: '2024-03-10' },
-  { id: 2, orderNo: 'ĐH002', customer: 'Trần Thị B', amount: '2,500,000', status: 'processing', date: '2024-03-11' },
-  { id: 3, orderNo: 'ĐH003', customer: 'Phạm Văn C', amount: '800,000', status: 'pending', date: '2024-03-12' },
-  { id: 4, orderNo: 'ĐH004', customer: 'Hoàng Thị D', amount: '3,200,000', status: 'completed', date: '2024-03-13' },
-  { id: 5, orderNo: 'ĐH005', customer: 'Vũ Văn E', amount: '1,500,000', status: 'failed', date: '2024-03-14' },
-];
+import {
+  revenueData,
+  salesData,
+  categoryData,
+  ordersData,
+  performanceData,
+} from '@/lib/mockData';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -89,49 +88,46 @@ export default function Home() {
 
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.charts.revenue}
-          </h3>
-          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
-            <p className="text-gray-500 dark:text-gray-400">Biểu đồ doanh thu...</p>
-          </div>
-        </div>
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.charts.trend}
-          </h3>
-          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
-            <p className="text-gray-500 dark:text-gray-400">Biểu đồ xu hướng...</p>
-          </div>
-        </div>
+        <LineChart
+          data={revenueData}
+          dataKey="revenue"
+          title={t.charts.revenue}
+          xAxisKey="name"
+          stroke="#3b82f6"
+          height={300}
+        />
+        <AreaChart
+          data={performanceData}
+          dataKey="performance"
+          title={t.charts.trend}
+          xAxisKey="name"
+          fill="#a855f7"
+          height={300}
+        />
       </div>
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.charts.sales}
-          </h3>
-          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
-            <p className="text-gray-500 dark:text-gray-400">Biểu đồ bán hàng...</p>
-          </div>
-        </div>
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t.charts.distribution}
-          </h3>
-          <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
-            <p className="text-gray-500 dark:text-gray-400">Biểu đồ phân phối...</p>
-          </div>
-        </div>
+        <BarChart
+          data={salesData}
+          dataKey="sales"
+          title={t.charts.sales}
+          xAxisKey="name"
+          fill="#f97316"
+          height={300}
+        />
+        <PieChart
+          data={categoryData}
+          title={t.charts.distribution}
+          height={300}
+        />
         <div className="flex flex-col gap-6">
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               {t.charts.performance}
             </h3>
             <div className="flex items-center justify-center h-32 bg-gray-50 dark:bg-gray-800 rounded-md">
-              <p className="text-gray-500 dark:text-gray-400">Hiệu suất...</p>
+              <p className="text-gray-500 dark:text-gray-400">Hiệu suất: 90%</p>
             </div>
           </div>
           <Calendar title={t.time.january} />
