@@ -9,13 +9,14 @@ interface PieChartProps {
   colors?: string[];
 }
 
-const DEFAULT_COLORS = ['#3b82f6', '#f97316', '#a855f7', '#ef4444', '#10b981'];
+// Vercel-style colors
+const VERCEL_COLORS = ['#0070f3', '#7928ca', '#ff0080', '#50e3c2', '#f5a623'];
 
 export function PieChart({
   data,
   title,
   height = 300,
-  colors = DEFAULT_COLORS,
+  colors = VERCEL_COLORS,
 }: PieChartProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -27,7 +28,7 @@ export function PieChart({
   
   const cx = 50;
   const cy = 50;
-  const r = 30;
+  const r = 35;
 
   const polarToCartesian = (angle: number) => {
     const radians = (angle * Math.PI) / 180;
@@ -57,18 +58,14 @@ export function PieChart({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+    <div className="bg-[#0a0a0a] rounded-lg border border-[#333] p-5">
       {title && (
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {title}
-        </h3>
+        <h3 className="text-sm font-medium text-[#ededed] mb-4">{title}</h3>
       )}
-      <div className="flex flex-col items-center">
+      <div className="flex items-center gap-6">
         <svg
-          viewBox="0 0 120 100"
-          className="w-full max-w-sm"
-          style={{ height: `${Math.min(height, 200)}px` }}
-          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 100 100"
+          className="w-32 h-32 flex-shrink-0"
           suppressHydrationWarning
         >
           {mounted && getSlices().map((slice, index) => (
@@ -76,19 +73,24 @@ export function PieChart({
               key={index}
               d={createArcPath(slice.startAngle, slice.endAngle)}
               fill={slice.color}
-              stroke="white"
+              stroke="#0a0a0a"
               strokeWidth="1"
             />
           ))}
         </svg>
-        <div className="grid grid-cols-2 gap-2 mt-4 text-sm">
+        <div className="flex-1 space-y-2">
           {data.map((item, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: colors[i % colors.length] }}
-              />
-              <span className="text-gray-600 dark:text-gray-400">{item.name}</span>
+            <div key={i} className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: colors[i % colors.length] }}
+                />
+                <span className="text-[#888]">{item.name}</span>
+              </div>
+              <span className="text-white font-medium">
+                {Math.round((item.value / total) * 100)}%
+              </span>
             </div>
           ))}
         </div>
