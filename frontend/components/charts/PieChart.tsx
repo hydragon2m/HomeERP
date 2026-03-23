@@ -35,8 +35,8 @@ export function PieChart({
   const polarToCartesian = (angle: number) => {
     const radians = (angle * Math.PI) / 180;
     return {
-      x: cx + r * Math.cos(radians),
-      y: cy + r * Math.sin(radians),
+      x: Math.round((cx + r * Math.cos(radians)) * 100) / 100,
+      y: Math.round((cy + r * Math.sin(radians)) * 100) / 100,
     };
   };
 
