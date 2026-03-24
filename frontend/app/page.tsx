@@ -110,142 +110,263 @@ export default function Home() {
     <DashboardLayout
       sidebarItems={sidebarItems}
       headerTitle={t.dashboard.title}
+      headerSubtitle={`${t.dashboard.welcome} đến HomeERP`}
       headerActions={
-        <Button size="sm">
-          <Plus className="w-4 h-4" />
-          Tao moi
+        <Button variant="primary" size="md">
+          <Plus className="w-4 h-4 mr-2" /> {t.actions.add}
         </Button>
       }
     >
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KPICard
-          title="Doanh thu"
-          value="₫45.2M"
-          change="+12.5%"
-          changeType="positive"
-        />
-        <KPICard
-          title="Don hang"
-          value="1,234"
-          change="+8.2%"
-          changeType="positive"
-        />
-        <KPICard
-          title="Khach hang"
-          value="856"
-          change="-3.1%"
-          changeType="negative"
-        />
-        <KPICard
-          title="San pham"
-          value="2,456"
-          change="+15.8%"
-          changeType="positive"
-        />
+      {/* Header Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white mb-2">Chào mừng trở lại</h1>
+        <p className="text-[#999] text-sm">Dưới đây là tổng quan hoạt động kinh doanh của bạn trong tháng này</p>
       </div>
 
-      {/* Charts Row */}
+      {/* KPI Section - Premium Design */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-[#999] uppercase tracking-wider">{t.metrics.revenue}</span>
+              <div className="w-8 h-8 rounded-full bg-[#3b82f6]/10 flex items-center justify-center"><Wallet className="w-4 h-4 text-[#3b82f6]" /></div>
+            </div>
+            <div className="mb-3">
+              <p className="text-3xl font-bold text-white">₫45.2B</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#10b981]" />
+              <span className="text-sm text-[#10b981] font-medium">+12.5%</span>
+              <span className="text-xs text-[#666] ml-1">từ tháng trước</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f97316]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-[#999] uppercase tracking-wider">{t.metrics.sales}</span>
+              <div className="w-8 h-8 rounded-full bg-[#f97316]/10 flex items-center justify-center"><ShoppingCart className="w-4 h-4 text-[#f97316]" /></div>
+            </div>
+            <div className="mb-3">
+              <p className="text-3xl font-bold text-white">1,234</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#10b981]" />
+              <span className="text-sm text-[#10b981] font-medium">+8.2%</span>
+              <span className="text-xs text-[#666] ml-1">từ tháng trước</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#a855f7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-[#999] uppercase tracking-wider">{t.metrics.orders}</span>
+              <div className="w-8 h-8 rounded-full bg-[#a855f7]/10 flex items-center justify-center"><Package className="w-4 h-4 text-[#a855f7]" /></div>
+            </div>
+            <div className="mb-3">
+              <p className="text-3xl font-bold text-white">856</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingDown className="w-4 h-4 text-[#ef4444]" />
+              <span className="text-sm text-[#ef4444] font-medium">-3.1%</span>
+              <span className="text-xs text-[#666] ml-1">từ tháng trước</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#10b981]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-[#999] uppercase tracking-wider">{t.metrics.users}</span>
+              <div className="w-8 h-8 rounded-full bg-[#10b981]/10 flex items-center justify-center"><Users className="w-4 h-4 text-[#10b981]" /></div>
+            </div>
+            <div className="mb-3">
+              <p className="text-3xl font-bold text-white">2,456</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#10b981]" />
+              <span className="text-sm text-[#10b981] font-medium">+15.8%</span>
+              <span className="text-xs text-[#666] ml-1">từ tháng trước</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Row - Premium Styled */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-        <LineChart
-          data={revenueData}
-          dataKey="revenue"
-          title="Doanh thu theo thang"
-          xAxisKey="name"
-          stroke="#0070f3"
-          height={280}
-        />
-        <AreaChart
-          data={performanceData}
-          dataKey="performance"
-          title="Hieu suat"
-          xAxisKey="name"
-          fill="#7928ca"
-          height={280}
-        />
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-white">Doanh thu theo tháng</h3>
+                <p className="text-xs text-[#666] mt-1">Biểu đồ doanh thu hàng tháng</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#3b82f6]/10 flex items-center justify-center">
+                <BarChart3 className="w-5 h-5 text-[#3b82f6]" />
+              </div>
+            </div>
+            <LineChart
+              data={revenueData}
+              dataKey="revenue"
+              xAxisKey="name"
+              stroke="#3b82f6"
+              height={220}
+            />
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#a855f7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-white">Xu hướng hiệu suất</h3>
+                <p className="text-xs text-[#666] mt-1">Biểu đồ hiệu suất hoạt động</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#a855f7]/10 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-[#a855f7]" />
+              </div>
+            </div>
+            <AreaChart
+              data={performanceData}
+              dataKey="performance"
+              xAxisKey="name"
+              fill="#a855f7"
+              height={220}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Second Charts Row */}
+      {/* Second Charts Row - Premium Styled */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <BarChart
-          data={salesData}
-          dataKey="sales"
-          title="Ban hang"
-          xAxisKey="name"
-          fill="#50e3c2"
-          height={280}
-        />
-        <PieChart
-          data={categoryData}
-          title="Phan loai san pham"
-          height={280}
-        />
-        <Card>
-          <CardHeader>
-            <CardTitle>Tong quan nhanh</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b border-[#333]">
-              <span className="text-[#888] text-sm">Tong san pham</span>
-              <span className="text-white font-medium">5,234</span>
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f97316]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-white">Phân tích bán hàng</h3>
+                <p className="text-xs text-[#666] mt-1">So sánh bán hàng theo tháng</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#f97316]/10 flex items-center justify-center">
+                <ShoppingCart className="w-5 h-5 text-[#f97316]" />
+              </div>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-[#333]">
-              <span className="text-[#888] text-sm">Het hang</span>
-              <span className="text-[#e00] font-medium">23</span>
+            <BarChart
+              data={salesData}
+              dataKey="sales"
+              xAxisKey="name"
+              fill="#f97316"
+              height={220}
+            />
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#10b981]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-white">Phân loại sản phẩm</h3>
+                <p className="text-xs text-[#666] mt-1">Phân bổ theo danh mục</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#10b981]/10 flex items-center justify-center">
+                <Package className="w-5 h-5 text-[#10b981]" />
+              </div>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-[#333]">
-              <span className="text-[#888] text-sm">Canh bao</span>
-              <span className="text-[#f5a623] font-medium">45</span>
+            <PieChart
+              data={categoryData}
+              height={220}
+            />
+          </div>
+        </div>
+
+        <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#50e3c2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-white">Tổng quan nhanh</h3>
+                <p className="text-xs text-[#666] mt-1">Thống kê chính của hệ thống</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-[#50e3c2]/10 flex items-center justify-center">
+                <Package className="w-5 h-5 text-[#50e3c2]" />
+              </div>
             </div>
-            <div className="flex items-center justify-between py-2">
-              <span className="text-[#888] text-sm">Ty le giu chan</span>
-              <span className="text-[#50e3c2] font-medium">94.2%</span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between pb-3 border-b border-[#333]">
+                <span className="text-[#888] text-sm">Tổng sản phẩm</span>
+                <span className="text-white font-bold">5,234</span>
+              </div>
+              <div className="flex items-center justify-between pb-3 border-b border-[#333]">
+                <span className="text-[#888] text-sm">Hết hàng</span>
+                <span className="text-[#ef4444] font-bold">23</span>
+              </div>
+              <div className="flex items-center justify-between pb-3 border-b border-[#333]">
+                <span className="text-[#888] text-sm">Cảnh báo</span>
+                <span className="text-[#f97316] font-bold">45</span>
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[#888] text-sm">Tỷ lệ giữ chân</span>
+                <span className="text-[#50e3c2] font-bold">94.2%</span>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* Orders Table */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Don hang gan day</CardTitle>
-          <Button variant="outline" size="sm">
-            Xem tat ca
-          </Button>
-        </CardHeader>
-        <CardContent className="p-0">
+      {/* Orders Table - Premium Styled */}
+      <div className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl border border-[#333] p-6 hover:border-[#555] transition-all duration-300 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#50e3c2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+        <div className="relative">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-white">Đơn hàng gần đây</h3>
+              <p className="text-xs text-[#666] mt-1">Danh sách các đơn hàng mới nhất</p>
+            </div>
+            <Button variant="outline" size="sm" className="text-[#888] border-[#444] hover:bg-[#333]">
+              Xem tất cả
+            </Button>
+          </div>
           <Table>
             <TableHeader>
               <TableRow className="border-[#333] hover:bg-transparent">
-                <TableHead className="text-[#888]">Ma DH</TableHead>
-                <TableHead className="text-[#888]">Khach hang</TableHead>
-                <TableHead className="text-[#888]">So tien</TableHead>
-                <TableHead className="text-[#888]">Trang thai</TableHead>
-                <TableHead className="text-[#888]">Ngay</TableHead>
-                <TableHead className="text-[#888] text-right">Hanh dong</TableHead>
+                <TableHead className="text-[#666] font-semibold">Mã ĐH</TableHead>
+                <TableHead className="text-[#666] font-semibold">Khách hàng</TableHead>
+                <TableHead className="text-[#666] font-semibold">Số tiền</TableHead>
+                <TableHead className="text-[#666] font-semibold">Trạng thái</TableHead>
+                <TableHead className="text-[#666] font-semibold">Ngày</TableHead>
+                <TableHead className="text-[#666] font-semibold text-right">Hành động</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {ordersData.map((order) => (
-                <TableRow key={order.id} className="border-[#333]">
-                  <TableCell className="font-medium text-white">{order.orderNo}</TableCell>
+                <TableRow key={order.id} className="border-[#333] hover:bg-[#222] transition-colors">
+                  <TableCell className="font-semibold text-white">{order.orderNo}</TableCell>
                   <TableCell className="text-[#888]">{order.customer}</TableCell>
-                  <TableCell className="text-white">₫{order.amount}</TableCell>
+                  <TableCell className="text-white font-medium">₫{order.amount}</TableCell>
                   <TableCell>
                     <StatusBadge status={order.status} />
                   </TableCell>
-                  <TableCell className="text-[#888]">{order.date}</TableCell>
+                  <TableCell className="text-[#888] text-sm">{order.date}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
-                      Xem
+                    <Button variant="ghost" size="sm" className="text-[#3b82f6] hover:text-[#60a5fa] hover:bg-[#3b82f6]/10">
+                      Xem chi tiết
                     </Button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </DashboardLayout>
   );
 }

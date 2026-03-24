@@ -107,7 +107,6 @@
 }
 
 html {
-  @apply scroll-smooth;
   color-scheme: dark;
 }
 
