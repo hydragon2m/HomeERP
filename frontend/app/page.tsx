@@ -112,7 +112,7 @@ export default function Home() {
       headerTitle={t.dashboard.title}
       headerSubtitle={`${t.dashboard.welcome} đến HomeERP`}
       headerActions={
-        <Button variant="primary" size="md">
+        <Button variant="default">
           <Plus className="w-4 h-4 mr-2" /> {t.actions.add}
         </Button>
       }
